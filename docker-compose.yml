@@ -8,18 +8,23 @@ services:
       - 5432:5432
     networks:
       - network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
   migrations:
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     image: migrate/migrate
     volumes:
-      - ./migrations/up:/migrations/
+      - ./db/migrations/:/migrations/
     networks:
       - network
     command: ["-database", $POSTGRES_URL, "-path", "migrations", "up"]
   graphql:
     depends_on:
-      - db
       - migrations
     image: graphile/postgraphile
     ports:
