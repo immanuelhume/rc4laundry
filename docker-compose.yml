@@ -1,0 +1,32 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    env_file:
+      - .env.local
+    ports:
+      - 5432:5432
+    networks:
+      - network
+    volumes:
+      - ./migrations/up:/docker-entrypoint-initdb.d/
+  graphql:
+    depends_on:
+      - db
+    image: graphile/postgraphile
+    ports:
+      - 5433:5433
+    networks:
+      - network
+    command:
+      [
+        "--connection",
+        $DATABASE_URL,
+        "--port",
+        "5433",
+        "--schema",
+        "rc4laundry",
+      ]
+
+networks:
+  network:
