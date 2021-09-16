@@ -8,11 +8,19 @@ services:
       - 5432:5432
     networks:
       - network
+  migrations:
+    depends_on:
+      - db
+    image: migrate/migrate
     volumes:
-      - ./migrations/up:/docker-entrypoint-initdb.d/
+      - ./migrations/up:/migrations/
+    networks:
+      - network
+    command: ["-database", $POSTGRES_URL, "-path", "migrations", "up"]
   graphql:
     depends_on:
       - db
+      - migrations
     image: graphile/postgraphile
     ports:
       - 5433:5433
