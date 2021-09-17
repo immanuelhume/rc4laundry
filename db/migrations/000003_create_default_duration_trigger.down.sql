@@ -1,0 +1,2 @@
+drop trigger if exists machine_approx_duration_default on rc4laundry.machine;
+drop function if exists rc4laundry.set_machine_approx_duration_default;

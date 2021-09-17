@@ -1,1 +1,1 @@
-DROP SCHEMA IF EXISTS rc4laundry;
+drop schema if exists rc4laundry;

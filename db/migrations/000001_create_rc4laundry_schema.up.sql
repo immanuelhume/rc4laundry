@@ -1,1 +1,1 @@
-CREATE SCHEMA IF NOT EXISTS rc4laundry;
+create schema if not exists rc4laundry;

@@ -1,0 +1,1 @@
+drop function if exists rc4laundry.machine_time_remaining;

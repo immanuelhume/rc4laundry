@@ -1,1 +1,0 @@
-DROP FUNCTION IF EXISTS rc4laundry.machine_in_use_time_remaining;

@@ -1,14 +1,14 @@
 version: "3"
 services:
   db:
-    image: postgres
+    image: postgres # latest pg image
     env_file:
-      - .env.local
+      - .env.local # store pg environment variables
     ports:
       - 5432:5432
     networks:
       - network
-    healthcheck:
+    healthcheck: # this allows other services to wait for pg to be ready
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
@@ -16,7 +16,7 @@ services:
   migrations:
     depends_on:
       db:
-        condition: service_healthy
+        condition: service_healthy # wait for pg to be up
     image: migrate/migrate
     volumes:
       - ./db/migrations/:/migrations/
@@ -25,7 +25,7 @@ services:
     command: ["-database", $POSTGRES_URL, "-path", "migrations", "up"]
   graphql:
     depends_on:
-      - migrations
+      - migrations # wait for migrations to complete
     image: graphile/postgraphile
     ports:
       - 5433:5433
