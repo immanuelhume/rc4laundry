@@ -82,8 +82,8 @@ func TestDB(t *testing.T) {
 		tx, err := db.Begin()
 		must(t, err, tx)
 		stmnt, err := tx.Prepare("insert into rc4laundry.machine(floor, position, type) values ($1, $2, $3) returning approx_duration")
-		defer stmnt.Close()
 		must(t, err, tx)
+		defer stmnt.Close()
 		for _, test := range cases {
 			var approxDuration int
 			err := stmnt.QueryRow(test.floor, test.position, test.machineType).Scan(&approxDuration)
@@ -108,5 +108,29 @@ func TestDB(t *testing.T) {
 		}
 		err = tx.Rollback()
 		must(t, err, tx)
+	})
+
+	t.Run("should increment use count upon every use", func(t *testing.T) {
+		cases := []struct {
+			initCount int
+			newCount  int
+		}{
+			{initCount: 0, newCount: 1},
+			{initCount: 5, newCount: 6},
+		}
+		for _, test := range cases {
+			var newCount int
+			tx, err := db.Begin()
+			must(t, err, tx)
+			_, err = tx.Exec("insert into rc4laundry.machine(floor, position, type, total_use_count) values ($1, $2, $3, $4)", 14, 0, "washer", test.initCount)
+			must(t, err, tx)
+			err = tx.QueryRow("update rc4laundry.machine set is_in_use = true where floor = $1 and position = $2 returning total_use_count", 14, 0).Scan(&newCount)
+			must(t, err, tx)
+			if newCount != test.newCount {
+				t.Errorf("Got %v want %v", newCount, test.newCount)
+			}
+			err = tx.Rollback()
+			must(t, err, tx)
+		}
 	})
 }

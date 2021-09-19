@@ -1,3 +1,9 @@
+## Requirements
+
+- Docker v20.10+
+- Docker Compose v1.29+
+- Go v1.17+ (optional, for tests only)
+
 ## Environment Variables
 
 `DATABASE_URL` This connection string is used by [PostGraphile](https://github.com/graphile/postgraphile). It could be: `postgres://postgres:postgres@db:5432/rc4laundry_test`.
@@ -22,7 +28,7 @@ If there are no errors, the GraphQL API playground and docs can be accessed at h
 
 ## Tests
 
-The tests are written in Go. This will run the tests locally.
+Tests on the database are written in Go. This will run the tests locally.
 
 ```
 cd tests
