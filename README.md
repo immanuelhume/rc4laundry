@@ -8,9 +8,11 @@
 
 `DATABASE_URL` This connection string is used by [PostGraphile](https://github.com/graphile/postgraphile). It could be: `postgres://postgres:postgres@db:5432/rc4laundry_test`.
 
-`POSTGRES_URL` This connection string is used by [golang-migrate](https://github.com/golang-migrate/migrate). It's the same as `DATABASE_URL`, just with SSL disabled: `postgres://postgres:postgres@db:5432/rc4laundry_test?sslmode=false`.
+`MIGRATIONS_URL` This connection string is used by [golang-migrate](https://github.com/golang-migrate/migrate). It's the same as `DATABASE_URL`, just with SSL disabled: `postgres://postgres:postgres@db:5432/rc4laundry_test?sslmode=false` for now.
 
-On top of these environment variables, we need a `.env.local` file with these variables, used as the `env_file` for the postgres service in docker-compose.
+Export these variables, or place them in a `.env` file. It must be named `.env` for docker-compose to detect it automatically.
+
+We also need a `.env.db.local` file with these three variables, used in the `env_file` field for the postgres service in docker-compose. It looks something like these.
 
 ```
 POSTGRES_USER=postgres

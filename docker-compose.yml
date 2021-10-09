@@ -3,7 +3,7 @@ services:
   db:
     image: postgres # latest pg image
     env_file:
-      - .env.local # store pg environment variables
+      - .env.db.local # store pg environment variables
     ports:
       - 5432:5432
     networks:
@@ -22,7 +22,7 @@ services:
       - ./db/migrations/:/migrations/
     networks:
       - network
-    command: ["-database", $POSTGRES_URL, "-path", "migrations", "up"]
+    command: ["-database", $MIGRATIONS_URL, "-path", "migrations", "up"]
   graphql:
     depends_on:
       - migrations # wait for migrations to complete
